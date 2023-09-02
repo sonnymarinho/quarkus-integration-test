@@ -6,6 +6,8 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import org.jboss.resteasy.reactive.ResponseStatus;
 
 @Path("/gift")
 public class GreetingResource {
@@ -14,8 +16,9 @@ public class GreetingResource {
     SantaClausService santaClausService;
 
     @POST
-    @Produces(MediaType.WILDCARD)
-    public Gift helloPost(CreateRequest request) {
+    @ResponseStatus(201)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Gift create(CreateRequest request) {
         final var gift = Gift.withName(request.getName());
         santaClausService.create(gift);
 
@@ -24,8 +27,10 @@ public class GreetingResource {
 
     @GET
     @Path("/{id}")
-    @Produces(MediaType.WILDCARD)
-    public Gift helloGet(Long id) {
-        return santaClausService.get(id);
+    @ResponseStatus(200)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Gift get(Long id) {
+        Gift gift = santaClausService.get(id);
+        return gift;
     }
 }
